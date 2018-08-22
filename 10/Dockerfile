@@ -1,26 +1,22 @@
 FROM node:10-alpine
 
 # update yarn
-ENV YARN_VERSION 1.9.4
-
-RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
-  && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
-  && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" \
-  && gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-  && mkdir -p /opt \
-  && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ \
-  && ln -snf /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
-  && ln -snf /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
-  && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-  && apk del .build-deps-yarn
-
+ENV YARN_VERSION=1.9.4 \
 # set taobao mirror
-ENV TAOBAO_MIRROR https://npm.taobao.org/mirrors
-
+TAOBAO_MIRROR=https://npm.taobao.org/mirrors \
 # mirror for nvm
-ENV NODEJS_ORG_MIRROR $TAOBAO_MIRROR/node
-ENV NODIST_NODE_MIRROR $TAOBAO_MIRROR/node
-ENV NVM_NODEJS_ORG_MIRROR $TAOBAO_MIRROR/node
+NODEJS_ORG_MIRROR=$TAOBAO_MIRROR/node \
+NODIST_NODE_MIRROR=$TAOBAO_MIRROR/node \
+NVM_NODEJS_ORG_MIRROR=$TAOBAO_MIRROR/node
+
+RUN apk add --no-cache --virtual .build-deps-yarn curl tar \
+&& curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
+&& mkdir -p /opt \
+&& tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ \
+&& ln -snf /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
+&& ln -snf /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
+&& rm yarn-v$YARN_VERSION.tar.gz \
+&& apk del .build-deps-yarn
 
 # mirrors for npm
 RUN npm set registry https://registry.npm.taobao.org \
@@ -55,7 +51,6 @@ RUN npm set registry https://registry.npm.taobao.org \
 && npm set utp-native-binary-host-mirror $TAOBAO_MIRROR/utp-native/v{version} \
 && npm set zmq-prebuilt-binary-host-mirror $TAOBAO_MIRROR/zmq-prebuilt/v{version}
 
-VOLUME ["/app"]
 WORKDIR /app
 
 CMD ["yarn", "--production"]
