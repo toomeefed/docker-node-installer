@@ -18,7 +18,7 @@ $ docker run --rm -v $PWD:/app toomee/node-installer:8 npm install --production
 
 ## 标签对应关系
 
-Image Name | Node | Yarn | Dockerfile
+Image Name | Node | Yarn | npm | Dockerfile
 :-- | :-- | :-- | :--
-toomee/node-installer:8 | v8.11.3 | v1.9.4 | [Dockerfile](https://github.com/toomeefed/docker-node-installer/blob/master/8/Dockerfile)
-toomee/node-installer:10 | v10.8.0 | v1.9.4 | [Dockerfile](https://github.com/toomeefed/docker-node-installer/blob/master/10/Dockerfile)
+toomee/node-installer:8 | v8.15.0 | v1.12.3 | v6.4.1 | [Dockerfile](https://github.com/toomeefed/docker-node-installer/blob/master/8/Dockerfile)
+toomee/node-installer:10 | v10.15.0 | v1.12.3 | v6.4.1 | [Dockerfile](https://github.com/toomeefed/docker-node-installer/blob/master/10/Dockerfile)
